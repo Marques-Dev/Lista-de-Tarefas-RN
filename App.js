@@ -1,5 +1,5 @@
-import React, {useState, useCallback} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput } from 'react-native';
+import React, {useState, useCallback, useEffect} from 'react';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput, AsyncStorage } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import TaskList from './src/components/TaskList';
 import * as Animatable from 'react-native-animatable'; 
@@ -12,6 +12,29 @@ export default function App() {
   const [task, setTask] = useState([]);
   const [open, setopen] = useState(false);
   const [input, setInput] = useState('');
+
+ 
+  {/*Função assincrona, o awit faz a funcção esperar o dado, ja que o asyncStorage nao é tao rápido :3*/}
+  //buscando todas as tarefas ao iniciar o APP 
+  useEffect(() => {
+    async function loadtasks(){
+      const taskStorage = await AsyncStorage.getItem('@task');
+      
+      if(taskStorage){
+        setTask(JSON.parse(taskStorage));
+      }
+    }
+    loadtasks();
+  }, []);
+
+  //salvando caso tenha alguma tarefa alterada 
+  useEffect(() => {
+    async function saveTasks(){
+      await AsyncStorage.setItem('@task', JSON.stringify(task));
+    }
+    saveTasks();
+
+  },[task]);
 
   function handleAdd(){
     if(input == '') return;
