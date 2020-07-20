@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import TaskList from './src/components/TaskList';
@@ -22,8 +22,16 @@ export default function App() {
     };
 
     setTask([...task, data]);
+    setopen(false);
+    setInput('');
 
   }
+
+  {/* Retorna todos os itens que sao diferentes de key.data (o que vc clicou) */}
+ const handleDelete = useCallback ((data) => {
+   const find = task.filter(r => r.key !== data.key);
+   setTask(find);
+ })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,12 +43,14 @@ export default function App() {
 
       {/*Aqui vai a lista*/}
 
+      
+
       <FlatList
-      marginHorizontal={10}
+      marginHorizontal={10}   
       showsHorizontalScrollIndicator={false}
       data={task}
       keyExtractor={ (item) => String(item.key)}
-      renderItem={({item}) => <TaskList data={item}/> }
+      renderItem={({item}) => <TaskList data={item} handleDelete={handleDelete} /> }
       
       />
 
@@ -68,7 +78,7 @@ export default function App() {
             value={input}
             onChangeText={ (texto) => setInput(texto)  }
             />
-            <TouchableOpacity style={styles.handleAdd} onPress={ () => handleAdd}>
+            <TouchableOpacity style={styles.handleAdd} onPress={handleAdd}>
               <Text style={styles.handleTextAdd}>Cadastrar</Text>
             </TouchableOpacity>
           </Animatable.View>
