@@ -1,16 +1,29 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, FlatList, Modal, TextInput } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import TaskList from './src/components/TaskList';
+import * as Animatable from 'react-native-animatable'; 
+
+
+const AnimatedBtn = Animatable.createAnimatableComponent(TouchableOpacity);
+
 
 export default function App() {
-  const [task, setTask] = useState([
-    {key: 1, task: 'comprar pao'},
-    {key: 2, task: 'assistir anime'},
-    {key: 3, task: 'codar'},
-    {key: 4, task: 'dormir'},
-  ]);
+  const [task, setTask] = useState([]);
+  const [open, setopen] = useState(false);
+  const [input, setInput] = useState('');
 
+  function handleAdd(){
+    if(input == '') return;
+
+    const data ={
+      key: input,
+      task: input 
+    };
+
+    setTask([...task, data]);
+
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,9 +44,49 @@ export default function App() {
       
       />
 
-      <TouchableOpacity style={styles.fab}>
+
+      <Modal animationType="slide" transparent={false} visible={open}>
+        <SafeAreaView style={styles.modal}>
+
+           
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={ () => setopen(false)}>
+              <Ionicons style={{marginLeft: 5, marginRight: 5}} name="md-arrow-back" size={40} color="#FFF"/>
+            </TouchableOpacity>
+            <Text style={styles.modalTitle}> Nova Tarefa </Text>
+          </View>
+
+
+
+          <Animatable.View style={styles.modalBody} animation="fadeInUp" useNativeDriver>
+            <TextInput
+            multiline={true}
+            placeholderTextColor="#747474"
+            autoCorrect={false}
+            placeholder="O que precisa fazer hoje?"
+            style={styles.input}  
+            value={input}
+            onChangeText={ (texto) => setInput(texto)  }
+            />
+            <TouchableOpacity style={styles.handleAdd} onPress={ () => handleAdd}>
+              <Text style={styles.handleTextAdd}>Cadastrar</Text>
+            </TouchableOpacity>
+          </Animatable.View>
+
+
+
+        </SafeAreaView>
+      </Modal>
+
+      <AnimatedBtn 
+      style={styles.fab}
+      useNativeDriver
+      animation = "bounceInUp"
+      duration={1500}
+      onPress={ () => setopen(true) }
+      >
         <Ionicons name="ios-add" size={35} color ={'#FFF'}/>
-      </TouchableOpacity>
+      </AnimatedBtn>
 
 
 
@@ -74,5 +127,54 @@ const styles = StyleSheet.create({
       height: 3,
       
     }
+  },
+  modal:{
+    flex: 1,
+    backgroundColor: '#171d31'
+
+  },
+  modalHeader:{
+    marginLeft: 10,
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+
+  },
+  modalTitle:{
+    marginLeft: 15,
+    fontSize: 23,
+    color: '#FFF'
+  },
+  modalBody:{
+    marginTop: 15,
+
+  },
+  input:{
+    fontSize: 15,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 30,
+    backgroundColor: '#FFF',
+    padding: 9,
+    height: 85,
+    textAlignVertical: 'top',
+    color: '#000',
+    borderRadius: 5
+
+  },
+  handleAdd:{
+    backgroundColor: '#FFF',
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 10,
+    marginRight:10,
+    height: 40,
+    borderRadius: 5
+
+  },
+  handleTextAdd:{
+    fontSize: 20,
   }
+  
 });
