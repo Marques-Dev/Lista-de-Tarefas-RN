@@ -1,6 +1,5 @@
 # Lista-de-Tarefas-RN
-Lista de tarefas, Utilizando React-Native. Usando AsyncStorage.
-
+Lista de tarefas, Utilizando React-Native. Usando AsyncStorage...
 
 Abra com vscode;
 
