@@ -5,4 +5,4 @@ Abra com vscode;
 
 com o expo instalado no celular ou emulador, digite expo start no console para iniciar...
 
-:)
+;3
