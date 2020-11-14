@@ -7,3 +7,5 @@ npm install <br>
 expo start
 
 ## Agora abra o projeto no seu dispositivo, ou se tiver o emulador e so rodar nele.
+
+
